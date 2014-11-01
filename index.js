@@ -9,7 +9,7 @@ var elixir = require('laravel-elixir'),
 elixir.extend("compass", function(src, output) {
 
     var config = this;
-    var baseDir = config.preprocessors.baseDir + 'scss';
+    var baseDir = config.assetsDir + 'scss';
     src = this.buildGulpSrc(src, baseDir, '**/*.scss');
 
     gulp.task('compass', function() {
