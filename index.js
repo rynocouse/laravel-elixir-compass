@@ -1,7 +1,8 @@
 var elixir = require('laravel-elixir'),
     gulp = require("gulp"),
     compass = require('gulp-compass'),
-    notify = require('gulp-notify'),
+    utilities = require('laravel-elixir/ingredients/helpers/utilities'),
+    Notification = require('laravel-elixir/ingredients/helpers/Notification'),
     _ = require('underscore');
 
 elixir.extend("compass", function(src, outputDir, options) {
@@ -20,29 +21,14 @@ elixir.extend("compass", function(src, outputDir, options) {
         };
 
     options = _.extend(defaultOptions, options);
-    src = this.buildGulpSrc(src, options.sass, '**/*.scss');
+    src = utilities.buildGulpSrc(src, options.sass, '**/*.scss');
+
+    var onError = function(e) {
+        new Notification().error(e, 'Compass Compilation Failed!');
+        this.emit('end');
+    };
 
     gulp.task('compass', function() {
-        var onError = function(err) {
-            notify.onError({
-                title:    "Laravel Elixir",
-                subtitle: "Compass Compilation Failed!",
-                message:  "Error: <%= error.message %>",
-                icon: __dirname + '/../laravel-elixir/icons/fail.png'
-            })(err);
-
-            this.emit('end');
-        };
-
-        var success = function() {
-            return {
-                title: 'Laravel Elixir',
-                subtitle: 'Compass Compiled!',
-                icon: __dirname + '/../laravel-elixir/icons/laravel.png',
-                message: ' '
-            }
-        };
-
         return gulp.src(src)
             .pipe(compass({
                 require: options.modules,
@@ -56,10 +42,9 @@ elixir.extend("compass", function(src, outputDir, options) {
                 sourcemap: options.sourcemap
             })).on('error', onError)
             .pipe(gulp.dest(options.css))
-            .pipe(notify(success()));
+            .pipe(new Notification().message('Compass Compiled!'));
     });
 
     this.registerWatcher('compass', options.sass + '/**/*.scss');
     return this.queueTask("compass");
-
 });
