@@ -1,46 +1,50 @@
 var elixir = require('laravel-elixir'),
     gulp = require("gulp"),
     compass = require('gulp-compass'),
-    notify = require('gulp-notify'),
-    autoprefixer = require('gulp-autoprefixer'),
-    minify = require('gulp-minify-css'),
-    gulpif = require('gulp-if');
+    utilities = require('laravel-elixir/ingredients/helpers/utilities'),
+    Notification = require('laravel-elixir/ingredients/helpers/Notification'),
+    _ = require('underscore');
 
-elixir.extend("compass", function(src, output) {
+elixir.extend("compass", function(src, outputDir, options) {
 
-    var config = this;
-    var baseDir = config.assetsDir + 'scss';
-    src = this.buildGulpSrc(src, baseDir, '**/*.scss');
-
-    gulp.task('compass', function() {
-        var onError = function(err) {
-            notify.onError({
-                title:    "Laravel Elixir",
-                subtitle: "Compass Compilation Failed!",
-                message:  "Error: <%= error.message %>",
-                icon: __dirname + '/../laravel-elixir/icons/fail.png'
-            })(err);
-
-            this.emit('end');
+    var config = this,
+        defaultOptions = {
+            config_file: false,
+            sourcemap:   false,
+            modules:     false,
+            style:       config.production ? "compressed" : "expanded",
+            image:       config.baseDir   + 'images',
+            font:        config.baseDir   + 'fonts',
+            sass:        config.assetsDir + 'scss',
+            css:         outputDir || config.cssOutput,
+            js:          config.jsOutput
         };
 
+    options = _.extend(defaultOptions, options);
+    src = utilities.buildGulpSrc(src, options.sass, '**/*.scss');
+
+    var onError = function(e) {
+        new Notification().error(e, 'Compass Compilation Failed!');
+        this.emit('end');
+    };
+
+    gulp.task('compass', function() {
         return gulp.src(src)
             .pipe(compass({
-                css: output || config.cssOutput,
-                sass: baseDir
+                require: options.modules,
+                config_file: options.config_file,
+                style: options.style,
+                css: options.css,
+                sass: options.sass,
+                font: options.font,
+                image: options.image,
+                javascript: options.js,
+                sourcemap: options.sourcemap
             })).on('error', onError)
-            .pipe(autoprefixer())
-            .pipe(gulpif(config.production, minify()))
-            .pipe(gulp.dest(output || config.cssOutput))
-            .pipe(notify({
-                title: 'Laravel Elixir',
-                subtitle: 'Compass Compiled!',
-                icon: __dirname + '/../laravel-elixir/icons/laravel.png',
-                message: ' '
-            }));
+            .pipe(gulp.dest(options.css))
+            .pipe(new Notification().message('Compass Compiled!'));
     });
 
-    this.registerWatcher('compass', baseDir + '/**/*.scss');
+    this.registerWatcher('compass', options.sass + '/**/*.scss');
     return this.queueTask("compass");
-
 });

@@ -1,6 +1,6 @@
 {
     "name": "laravel-elixir-compass",
-    "version": "0.1.1",
+    "version": "0.2.1",
     "description": "Laravel Elixir Compass Extension",
     "main": "index.js",
     "scripts": {
@@ -23,10 +23,8 @@
         "url": "https://github.com/rynocouse/laravel-elixir-compass/issues"
     },
     "dependencies": {
-        "gulp-autoprefixer": "^1.0.1",
-        "gulp-if": "^1.2.5",
-        "gulp-minify-css": "^0.3.10",
         "gulp-notify": "^2.0.0",
-        "gulp-compass": "^1.3.3"
+        "gulp-compass": "^1.3.3",
+        "underscore": "^1.7.0"
     }
 }
