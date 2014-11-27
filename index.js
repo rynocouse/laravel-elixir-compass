@@ -2,12 +2,25 @@ var elixir = require('laravel-elixir'),
     gulp = require("gulp"),
     compass = require('gulp-compass'),
     notify = require('gulp-notify'),
-    config = require('./Config');
+    _ = require('underscore');
 
-elixir.extend("compass", function(src, userConfig) {
+elixir.extend("compass", function(src, outputDir, options) {
 
-    config.mergeConfig(userConfig);
-    src = this.buildGulpSrc(src, config.sass, '**/*.scss');
+    var config = this,
+        defaultOptions = {
+            config_file: false,
+            sourcemap:   false,
+            modules:     false,
+            style:       config.production ? "compressed" : "expanded",
+            image:       config.baseDir   + 'images',
+            font:        config.baseDir   + 'fonts',
+            sass:        config.assetsDir + 'scss',
+            css:         outputDir || config.cssOutput,
+            js:          config.jsOutput
+        };
+
+    options = _.extend(defaultOptions, options);
+    src = this.buildGulpSrc(src, options.sass, '**/*.scss');
 
     gulp.task('compass', function() {
         var onError = function(err) {
@@ -32,21 +45,21 @@ elixir.extend("compass", function(src, userConfig) {
 
         return gulp.src(src)
             .pipe(compass({
-                require: config.requireModules,
-                config_file: config.configFile,
-                style: config.style,
-                css: config.css,
-                sass: config.sass,
-                font: config.font,
-                image: config.image,
-                javascript: config.js,
-                sourcemap: config.sourcemap
+                require: options.modules,
+                config_file: options.config_file,
+                style: options.style,
+                css: options.css,
+                sass: options.sass,
+                font: options.font,
+                image: options.image,
+                javascript: options.js,
+                sourcemap: options.sourcemap
             })).on('error', onError)
-            .pipe(gulp.dest(config.css))
+            .pipe(gulp.dest(options.css))
             .pipe(notify(success()));
     });
 
-    this.registerWatcher('compass', config.sass + '/**/*.scss');
+    this.registerWatcher('compass', options.sass + '/**/*.scss');
     return this.queueTask("compass");
 
 });

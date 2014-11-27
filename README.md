@@ -24,7 +24,7 @@ mix.compass("bootstrap.scss");
 Finally, if you'd like to output to a different directory than the default `public/css`, then you may override this as well.
 
 ```
-mix.compass("bootstrap.scss", {css: "foo/bar/baz"});
+mix.compass("bootstrap.scss", "foo/bar/baz");
 ```
 
 ##Options
@@ -32,11 +32,10 @@ mix.compass("bootstrap.scss", {css: "foo/bar/baz"});
 Compass has a lot of different options and ways you can tweak your output:
 
 ```
-mix.compass("bootstrap.scss", {
+mix.compass("bootstrap.scss", "foo/bar/baz", {
     require: ['susy'],
     config_file: "path/to/config.rb",
     style: "nested"
-    css: "public/foo/css",
     sass: "resources/assets/sass",
     font: "public/fonts",
     image: "public/images",
@@ -45,10 +44,9 @@ mix.compass("bootstrap.scss", {
 });
 ```
 
-* ```require``` - if you have any modules you'd like to include, like Susy or whatever, you can add them here.
+* ```module``` - if you have any modules you'd like to include, like Susy or whatever, you can add them here.
 * ```config_file``` - if you like to keep your compass configurations out of gulp, you can set the path to the config file and you can use that.  *Important note: if you change the Sass and CSS directories in your config.rb file you need to update them in here too*
 * ```style``` - 3 options here: "nested", "compressed" and "expanded".  By default in production you css will be compressed and locally it will be expanded.
-* ```css``` - path to the CSS 
 * ```sass``` - path to Sass files
 * ```font``` - path to fonts directory
 * ```image``` - path to image directory
