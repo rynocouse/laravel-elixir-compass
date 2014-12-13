@@ -8,13 +8,14 @@ var elixir = require('laravel-elixir'),
 elixir.extend("compass", function(src, outputDir, options) {
 
     var config = this,
+        publicDir = 'public/',
         defaultOptions = {
             config_file: false,
             sourcemap:   false,
             modules:     false,
             style:       config.production ? "compressed" : "expanded",
-            image:       config.baseDir   + 'images',
-            font:        config.baseDir   + 'fonts',
+            image:       publicDir + 'images',
+            font:        publicDir + 'fonts',
             sass:        config.assetsDir + 'scss',
             css:         outputDir || config.cssOutput,
             js:          config.jsOutput
