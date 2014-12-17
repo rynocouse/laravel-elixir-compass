@@ -1,7 +1,7 @@
 var elixir = require('laravel-elixir'),
     gulp = require("gulp"),
     compass = require('gulp-compass'),
-    utilities = require('laravel-elixir/ingredients/helpers/utilities'),
+    utilities = require('laravel-elixir/ingredients/helpers/Utilities'),
     Notification = require('laravel-elixir/ingredients/helpers/Notification'),
     _ = require('underscore');
 
