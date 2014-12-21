@@ -8,7 +8,7 @@ var elixir = require('laravel-elixir'),
 elixir.extend("compass", function(src, outputDir, options) {
 
     var config = this,
-        publicDir = 'public/',
+        publicDir = './public/',
         defaultOptions = {
             config_file: false,
             sourcemap:   false,
@@ -42,7 +42,6 @@ elixir.extend("compass", function(src, outputDir, options) {
                 javascript: options.js,
                 sourcemap: options.sourcemap
             })).on('error', onError)
-            .pipe(gulp.dest(options.css))
             .pipe(new Notification().message('Compass Compiled!'));
     });
 
