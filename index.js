@@ -31,17 +31,8 @@ elixir.extend("compass", function(src, outputDir, options) {
 
     gulp.task('compass', function() {
         return gulp.src(src)
-            .pipe(compass({
-                require: options.modules,
-                config_file: options.config_file,
-                style: options.style,
-                css: options.css,
-                sass: options.sass,
-                font: options.font,
-                image: options.image,
-                javascript: options.js,
-                sourcemap: options.sourcemap
-            })).on('error', onError)
+            .pipe(compass(options))
+            .on('error', onError)
             .pipe(new Notification().message('Compass Compiled!'));
     });
 
