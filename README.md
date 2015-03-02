@@ -1,5 +1,14 @@
 laravel-elixir-compass
 ======================
+## Project has moved
+Please use [laravel-elixir-sass-compass](https://github.com/JoeCianflone/laravel-elixir-sass-compass) 
+
+If you've already installed this package via NPM you need to remove it and install the updated package: 
+```
+npm gulp install laravel-elixir-sass-compass -save
+```
+
+
 
 ## Usage
 This is a simple compass wrapper for Laravel Elixir that was ported from: [laravel-elixir-stylus](https://github.com/JeffreyWay/laravel-elixir-stylus)
